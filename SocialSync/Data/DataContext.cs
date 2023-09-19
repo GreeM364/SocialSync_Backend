@@ -1,0 +1,13 @@
+﻿using Microsoft.EntityFrameworkCore;
+using SocialSync.Entities;
+
+namespace SocialSync.Data
+{
+    public class DataContext : DbContext
+    {
+        public DataContext(DbContextOptions options) : base(options)
+        {}
+
+        public DbSet<AppUser> Users { get; set; }
+    }
+}
