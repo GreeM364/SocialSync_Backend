@@ -1,4 +1,5 @@
 using SocialSync.Extensions;
+using SocialSync.Middleware;
 
 // Add services to the container.
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod()
     .WithOrigins("https://localhost:4200"));
