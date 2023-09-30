@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SocialSync.DTOs;
 using SocialSync.Entities;
 using SocialSync.Extensions;
+using SocialSync.Helpers;
 using SocialSync.Interfaces;
 using SocialSync.Repository.IRepository;
 using System.Security.Claims;
@@ -26,9 +27,12 @@ namespace SocialSync.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery] UserParams userParams)
         {
-            var users = await _userRepository.GetMembersAsync();
+            var users = await _userRepository.GetMembersAsync(userParams);
+
+            Response.AddPaginationHeader(new PaginationHeader(users.CurrentPage, users.PageSize,
+                                                     users.TotalCount, users.TotalPages));
 
             return Ok(users);
         }

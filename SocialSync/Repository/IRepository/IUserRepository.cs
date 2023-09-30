@@ -1,5 +1,6 @@
 ﻿using SocialSync.DTOs;
 using SocialSync.Entities;
+using SocialSync.Helpers;
 
 namespace SocialSync.Repository.IRepository
 {
@@ -10,7 +11,7 @@ namespace SocialSync.Repository.IRepository
         Task<IEnumerable<AppUser>> GetUsersAsync();
         Task<AppUser> GetUserByIdAsync(int id);
         Task<AppUser> GetUserByUsernameAsync(string username);
-        Task<IEnumerable<MemberDto>> GetMembersAsync();
+        Task<PagedList<MemberDto>> GetMembersAsync(UserParams userParams);
         Task<MemberDto> GetMemberAsync(string username);
     }
 }
