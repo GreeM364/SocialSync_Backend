@@ -1,6 +1,6 @@
 ﻿using SocialSync.DTOs;
 using SocialSync.Entities;
-using SocialSync.Helpers;
+using SocialSync.Helpers.Pagination;
 
 namespace SocialSync.Repository.IRepository
 {

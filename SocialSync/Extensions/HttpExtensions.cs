@@ -1,4 +1,4 @@
-﻿using SocialSync.Helpers;
+﻿using SocialSync.Helpers.Pagination;
 using System.Text.Json;
 
 namespace SocialSync.Extensions

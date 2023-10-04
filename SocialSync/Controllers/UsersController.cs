@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SocialSync.DTOs;
 using SocialSync.Entities;
 using SocialSync.Extensions;
-using SocialSync.Helpers;
+using SocialSync.Helpers.Pagination;
 using SocialSync.Interfaces;
 using SocialSync.Repository.IRepository;
 using System.Security.Claims;

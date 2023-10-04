@@ -5,7 +5,7 @@ using SocialSync.Data;
 using SocialSync.DTOs;
 using SocialSync.Entities;
 using SocialSync.Repository.IRepository;
-using SocialSync.Helpers;
+using SocialSync.Helpers.Pagination;
 
 namespace SocialSync.Repository
 {

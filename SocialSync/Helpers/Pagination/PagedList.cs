@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace SocialSync.Helpers
+namespace SocialSync.Helpers.Pagination
 {
     public class PagedList<T> : List<T>
     {

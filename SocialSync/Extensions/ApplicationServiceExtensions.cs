@@ -15,6 +15,7 @@ namespace SocialSync.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IPhotoServices, PhotoService>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ILikesRepository, LikesRepository>();
 
             services.AddDbContext<DataContext>(opt =>
             {

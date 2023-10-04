@@ -1,4 +1,4 @@
-﻿namespace SocialSync.Helpers
+﻿namespace SocialSync.Helpers.Pagination
 {
     public class PaginationHeader
     {
