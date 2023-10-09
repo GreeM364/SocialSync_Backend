@@ -4,6 +4,7 @@ using SocialSync.Data;
 using SocialSync.Entities;
 using SocialSync.Extensions;
 using SocialSync.Middleware;
+using SocialSync.SignalR;
 
 // Add services to the container.
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +28,10 @@ if (app.Environment.IsDevelopment())
 }
 app.UseMiddleware<ExceptionMiddleware>();
 
-app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod()
+app.UseCors(builder => builder
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials()
     .WithOrigins("https://localhost:4200"));
 
 app.UseHttpsRedirection();
@@ -36,6 +40,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<PresenceHub>("hubs/presence");
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;

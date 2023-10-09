@@ -5,6 +5,7 @@ using SocialSync.Interfaces;
 using SocialSync.Repository;
 using SocialSync.Repository.IRepository;
 using SocialSync.Services;
+using SocialSync.SignalR;
 
 namespace SocialSync.Extensions
 {
@@ -17,6 +18,7 @@ namespace SocialSync.Extensions
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ILikesRepository, LikesRepository>();
             services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddSingleton<PresenceTracker>();
 
             services.AddDbContext<DataContext>(opt =>
             {
@@ -25,6 +27,7 @@ namespace SocialSync.Extensions
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.AddScoped<LogUserActivity>();
+            services.AddSignalR();
 
             return services;
         }
