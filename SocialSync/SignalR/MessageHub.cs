@@ -75,6 +75,15 @@ namespace SocialSync.SignalR
             {
                 message.DateRead = DateTime.UtcNow;
             }
+            else
+            {
+                var connections = await PresenceTracker.GetConnectionsForUser(recipient.UserName);
+                if (connections != null)
+                {
+                    await _presenceHub.Clients.Clients(connections).SendAsync("NewMessageReceived",
+                        new { username = sender.UserName, knownAs = sender.KnownAs });
+                }
+            }
 
             _messageRepository.AddMessage(message);
 
