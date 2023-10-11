@@ -113,5 +113,12 @@ namespace SocialSync.Repository
                 .FirstOrDefaultAsync(x => x.Name == groupName);
         }
 
+        public async Task<Group> GetGroupForConnection(string connectionId)
+        {
+            return await _context.Groups
+                .Include(x => x.Connections)
+                .Where(x => x.Connections.Any(c => c.ConnectionId == connectionId))
+                .FirstOrDefaultAsync();
+        }
     }
 }

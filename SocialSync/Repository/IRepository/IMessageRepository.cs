@@ -16,5 +16,6 @@ namespace SocialSync.Repository.IRepository
         void RemoveConnection(Connection connection);
         Task<Connection> GetConnection(string connectionId);
         Task<Group> GetMessageGroup(string groupName);
+        Task<Group> GetGroupForConnection(string connectionId);
     }
 }
