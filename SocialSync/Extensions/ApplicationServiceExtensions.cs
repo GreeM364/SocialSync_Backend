@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SocialSync.Data;
 using SocialSync.Helpers;
-using SocialSync.Interfaces;
-using SocialSync.Repository;
-using SocialSync.Repository.IRepository;
 using SocialSync.Services;
+using SocialSync.Services.Interfaces;
 using SocialSync.SignalR;
+using SocialSync.UnitOfWorks;
+using SocialSync.UnitOfWorks.Interfaces;
 
 namespace SocialSync.Extensions
 {
@@ -15,9 +15,7 @@ namespace SocialSync.Extensions
         {
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IPhotoServices, PhotoService>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<ILikesRepository, LikesRepository>();
-            services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddSingleton<PresenceTracker>();
 
             services.AddDbContext<DataContext>(opt =>

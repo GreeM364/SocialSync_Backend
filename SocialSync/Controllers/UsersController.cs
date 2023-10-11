@@ -5,9 +5,9 @@ using SocialSync.DTOs;
 using SocialSync.Entities;
 using SocialSync.Extensions;
 using SocialSync.Helpers.Pagination;
-using SocialSync.Interfaces;
-using SocialSync.Repository.IRepository;
 using System.Security.Claims;
+using SocialSync.UnitOfWorks.Interfaces;
+using SocialSync.Services.Interfaces;
 
 namespace SocialSync.Controllers
 {
@@ -15,13 +15,13 @@ namespace SocialSync.Controllers
     [Authorize]
     public class UsersController : BaseApiController
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IPhotoServices _photoService;
         private readonly IMapper _mapper;
 
-        public UsersController(IUserRepository userRepository, IPhotoServices photoService, IMapper mapper)
+        public UsersController(IUnitOfWork unitOfWork, IPhotoServices photoService, IMapper mapper)
         {
-            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
             _photoService = photoService;
             _mapper = mapper;
         }
@@ -29,13 +29,13 @@ namespace SocialSync.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery] UserParams userParams)
         {
-            var currentUser = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
-            userParams.CurrentUsername = currentUser.UserName;
+            var gender = await _unitOfWork.UserRepository.GetUserGender(User.GetUsername());
+            userParams.CurrentUsername = User.GetUsername();
 
             if (string.IsNullOrEmpty(userParams.Gender))
-                userParams.Gender = currentUser.Gender == "male" ? "female" : "male";
+                userParams.Gender = gender == "male" ? "female" : "male";
 
-            var users = await _userRepository.GetMembersAsync(userParams);
+            var users = await _unitOfWork.UserRepository.GetMembersAsync(userParams);
 
             Response.AddPaginationHeader(new PaginationHeader(users.CurrentPage, users.PageSize,
                                                      users.TotalCount, users.TotalPages));
@@ -47,20 +47,20 @@ namespace SocialSync.Controllers
         [HttpGet("{username}")]
         public async Task<ActionResult<MemberDto>> GetUser(string username)
         {
-            return await _userRepository.GetMemberAsync(username);
+            return await _unitOfWork.UserRepository.GetMemberAsync(username);
         }
 
         [HttpPut]
         public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
         {
             var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var user = await _userRepository.GetUserByUsernameAsync(username);
+            var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(username);
 
             _mapper.Map(memberUpdateDto, user);
 
-            _userRepository.Update(user);
+            _unitOfWork.UserRepository.Update(user);
 
-            if (await _userRepository.SaveAllAsync()) 
+            if (await _unitOfWork.Complete()) 
                 return NoContent();
 
             return BadRequest("Failed to update user");
@@ -69,7 +69,7 @@ namespace SocialSync.Controllers
         [HttpPost("add-photo")]
         public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file)
         {
-            var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
+            var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
 
             var result = await _photoService.AddPhotoAsync(file);
 
@@ -87,7 +87,7 @@ namespace SocialSync.Controllers
 
             user.Photos.Add(photo);
 
-            if (await _userRepository.SaveAllAsync())
+            if (await _unitOfWork.Complete())
                 return CreatedAtAction(nameof(GetUser), new { username = user.UserName },
                     _mapper.Map<PhotoDto>(photo));
 
@@ -97,7 +97,7 @@ namespace SocialSync.Controllers
         [HttpPut("set-main-photo/{photoId}")]
         public async Task<ActionResult> SetMainPhoto(int photoId)
         {
-            var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
+            var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
 
             var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
 
@@ -113,7 +113,7 @@ namespace SocialSync.Controllers
 
             photo.IsMain = true;
 
-            if (await _userRepository.SaveAllAsync()) 
+            if (await _unitOfWork.Complete()) 
                 return NoContent();
 
             return BadRequest("Problem setting main photo");
@@ -122,7 +122,7 @@ namespace SocialSync.Controllers
         [HttpDelete("delete-photo/{photoId}")]
         public async Task<ActionResult> DeletePhoto(int photoId)
         {
-            var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
+            var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
 
             var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
 
@@ -141,7 +141,7 @@ namespace SocialSync.Controllers
 
             user.Photos.Remove(photo);
 
-            if (await _userRepository.SaveAllAsync()) 
+            if (await _unitOfWork.Complete()) 
                 return Ok();
 
             return BadRequest("Problem deleting photo");

@@ -2,7 +2,7 @@
 using CloudinaryDotNet.Actions;
 using Microsoft.Extensions.Options;
 using SocialSync.Helpers;
-using SocialSync.Interfaces;
+using SocialSync.Services.Interfaces;
 
 namespace SocialSync.Services
 {

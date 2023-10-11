@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialSync.DTOs;
 using SocialSync.Entities;
-using SocialSync.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using SocialSync.Services.Interfaces;
 
 namespace SocialSync.Controllers
 {

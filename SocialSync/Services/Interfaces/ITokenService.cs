@@ -1,6 +1,6 @@
 ﻿using SocialSync.Entities;
 
-namespace SocialSync.Interfaces
+namespace SocialSync.Services.Interfaces
 {
     public interface ITokenService
     {

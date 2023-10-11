@@ -1,10 +1,10 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using SocialSync.Entities;
-using SocialSync.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using SocialSync.Services.Interfaces;
 
 namespace SocialSync.Services
 {
