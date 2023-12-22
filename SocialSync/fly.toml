@@ -1,0 +1,28 @@
+# fly.toml app configuration file generated for socialsync-withered-tree-354 on 2023-12-10T15:36:28+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "socialsync-withered-tree-354"
+primary_region = "waw"
+
+[build]
+  image = "greem364/social_sync:latest"
+
+[env]
+  ASPNETCORE_URLS = "http://+:8080"
+  CloudinarySettings__ApiKey = "512162677995726"
+  CloudinarySettings__CloudName = "ddvj0cerq"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 1024
